@@ -2,9 +2,15 @@ import 'package:flutter/material.dart';
 import 'app_menu_handler/UI_handler/toggle_switch.dart';
 import 'app_menu_handler/UI_handler/record_button.dart';
 import 'app_menu_handler/UI_handler/text_transcript_displayer.dart';
+import 'package:virtual_assistant/voice_input_processor/vosk_handler.dart';
+import 'overlay_main.dart';
 
-void main() {
-  runApp(const MyApp());
+void main(List<String> args) {
+  if (args.contains("overlay")) {
+    overlayMain();
+  } else {
+    runApp(const MyApp());
+  }
 }
 
 class MyApp extends StatelessWidget {
@@ -57,7 +63,8 @@ class _MyHomePageState extends State<MyHomePage> {
               ],
             ),
             const RecordButton(), //Recording button
-            AudioInputDisplayer() //Transcript display area
+            AudioInputDisplayer(key: AudioInputDisplayer.globalKey), //Transcript display area
+
           ],
         ),
       ),

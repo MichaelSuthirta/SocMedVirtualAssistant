@@ -1,17 +1,40 @@
-import 'package:flutter/cupertino.dart';
-import 'package:virtual_assistant/voice_input_processor/vosk_handler.dart';
+import 'package:flutter/material.dart';
+import '../../voice_input_processor/vosk_handler.dart';
 
-class AudioInputDisplayer extends StatelessWidget{
-  AudioInputDisplayer({super.key});
-  static final VoskHandler handler = VoskHandler.getInstance();
+class AudioInputDisplayer extends StatefulWidget {
+  static final GlobalKey<_AudioInputDisplayerState> globalKey = GlobalKey();
+
+  const AudioInputDisplayer({super.key});
 
   @override
-  Widget build(BuildContext context){
-    return ValueListenableBuilder(
-        valueListenable: handler.textResult, //Checks on changes on textResult
-        builder: (context, text, child){
-          return Text(text); //Gives text with value of the textResult
-        }
+  State<AudioInputDisplayer> createState() => _AudioInputDisplayerState();
+}
+
+class _AudioInputDisplayerState extends State<AudioInputDisplayer> {
+  final handler = VoskHandler.getInstance();
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const SizedBox(height: 20),
+        const Text("😸You said:", style: TextStyle(fontWeight: FontWeight.bold)),
+        ValueListenableBuilder<String>(
+          valueListenable: handler.textResult,
+          builder: (context, value, child) {
+            return Text(value.isEmpty ? "(kosong)" : value);
+          },
+        ),
+        const SizedBox(height: 20),
+        const Text("🎧Gemini replied:", style: TextStyle(fontWeight: FontWeight.bold)),
+        ValueListenableBuilder<String>(
+          valueListenable: handler.geminiReplyNotifier,
+          builder: (context, value, child) {
+            return Text(value.isEmpty ? "(belum ada jawaban)" : value);
+          },
+        ),
+      ],
     );
   }
 }
