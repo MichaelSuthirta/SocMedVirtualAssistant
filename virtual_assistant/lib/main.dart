@@ -4,30 +4,41 @@ import 'app_menu_handler/UI_handler/record_button.dart';
 import 'app_menu_handler/UI_handler/text_transcript_displayer.dart';
 import 'package:virtual_assistant/voice_input_processor/vosk_handler.dart';
 import 'overlay_main.dart';
+import 'package:flutter_overlay_window/flutter_overlay_window.dart';
+import 'app_menu_handler/UI_handler/overlay_content.dart';
 
-void main(List<String> args) {
-
-  if (args.contains("overlay")) {
-    runApp(const MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: OverlayWidget(),
-    ));
-  } else {
-    runApp(const MyApp());
-  }
+void main() {
+  runApp(MyApp());
 }
 
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  Future<void> _startOverlay() async {
+    if (!await FlutterOverlayWindow.isPermissionGranted()) {
+      await FlutterOverlayWindow.requestPermission();
+    }
+    await FlutterOverlayWindow.showOverlay(
+      height: WindowSize.fullCover,
+      width: WindowSize.fullCover,
+      alignment: OverlayAlignment.centerRight,
+      overlayTitle: "AssistiveTouch",
+      flag: OverlayFlag.defaultFlag,
+      enableDrag: true,
+      overlayContent: OverlayContent.entryPoint(),
+    );
+  }
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: 'Virtual Assistant',
-      home: MyHomePage(),
+    return MaterialApp(
+      home: Scaffold(
+        body: Center(
+          child: ElevatedButton(
+            child: Text("Start Overlay"),
+            onPressed: _startOverlay,
+          ),
+        ),
+      ),
     );
   }
 }
