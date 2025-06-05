@@ -1,27 +1,34 @@
 import 'package:flutter/material.dart';
 
-@pragma('vm:entry-point') // <<< WAJIB untuk overlay
 void overlayMain() {
-  runApp(const MaterialApp(
-    debugShowCheckedModeBanner: false,
-    home: OverlayWidget(),
-  ));
+  runApp(
+    MaterialApp(
+      debugShowCheckedModeBanner: false,
+      home: OverlayWidget(),
+    ),
+  );
 }
 
 class OverlayWidget extends StatelessWidget {
-  const OverlayWidget({super.key});
-
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
+    return Scaffold(
       backgroundColor: Colors.transparent,
-      body: Center(
-        child: Text(
-          "Floating Overlay Active",
-          style: TextStyle(
-            fontSize: 18,
-            color: Colors.white,
-            backgroundColor: Colors.black87,
+      body: Align(
+        alignment: Alignment.centerRight,
+        child: GestureDetector(
+          onTap: () {
+            // aksi klik bubble
+          },
+          child: Container(
+            width: 60,
+            height: 60,
+            margin: EdgeInsets.only(right: 10),
+            decoration: BoxDecoration(
+              color: Colors.blue.withOpacity(0.7),
+              shape: BoxShape.circle,
+            ),
+            child: Icon(Icons.mic, color: Colors.white),
           ),
         ),
       ),
